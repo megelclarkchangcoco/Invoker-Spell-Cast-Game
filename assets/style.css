@@ -1,0 +1,673 @@
+   /* 1. THEME / RESET */
+:root {
+  --bg: #14121f;
+  --panel: #1e1b2e;
+  --text: #ece8f5;
+  --mute: #9a94b3;
+  --gold: #ffd166;
+  --q: #6bb7ff;
+  --w: #b65cff;
+  --e: #ff9a1f;
+  --good: #55d98b;
+  --bad: #ff4d5e;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.hide {
+  display: none !important;
+}
+
+   /* 2. MAIN GAME LAYOUT */
+#app {
+  width: 100%;
+  max-width: 600px;
+  min-height: 100vh;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+/* 3. GAME HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+}
+
+#liveScore {
+  color: var(--text);
+  font-weight: bold;
+}
+
+#liveScore b {
+  color: var(--gold);
+}
+
+#topActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#qm,
+#pauseBtn {
+  min-width: 42px;
+  height: 36px;
+  border: 1px solid var(--mute);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: bold 1rem Georgia, serif;
+  cursor: pointer;
+  flex: none;
+}
+
+#qm {
+  width: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+}
+
+   /* 4. TIMER BAR */
+#bar {
+  height: 10px;
+  background: var(--panel);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#fill {
+  width: 100%;
+  height: 100%;
+  background: var(--gold);
+  transform-origin: left;
+}
+
+   /* 5. TARGET / SKILLS TO CAST
+   Shows the skill name + image, but NEVER the combo code. */
+#target {
+  padding: 20px 10px;
+  text-align: center;
+  background: var(--panel);
+  border-radius: 14px;
+}
+
+#target small {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--mute);
+}
+
+#spellHeader {
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-size: 1.9rem;
+  font-weight: bold;
+}
+
+#comboTargets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+
+.targetSpell {
+  min-width: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #29243d;
+  border: 1px solid #3a3556;
+  border-radius: 12px;
+  transition: 0.18s ease;
+}
+
+.targetSpell img,
+.targetSpell .placeholder {
+  width: 58px;
+  height: 58px;
+  border-radius: 10px;
+}
+
+.targetSpell img {
+  object-fit: cover;
+}
+
+.targetSpell .placeholder {
+  display: grid;
+  place-items: center;
+  background: #171522;
+  color: var(--mute);
+  font-size: 0.62rem;
+}
+
+.targetSpell b {
+  font-size: 0.86rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.targetSpell.done {
+  border-color: var(--good);
+  opacity: 0.55;
+  transform: scale(0.97);
+}
+
+.targetSpell.done::after {
+  content: "✓ CAST";
+  color: var(--good);
+  font: bold 0.7rem Georgia, serif;
+}
+
+#progress {
+  margin-top: 4px;
+  color: var(--mute);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* 6. CURRENT QUAS / WEX / EXORT SLOTS */
+#slots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.slot {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px dashed var(--mute);
+  border-radius: 50%;
+}
+
+.slot.f {
+  border-color: transparent;
+}
+
+.slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* 7. Q / W / E / R CONTROL GRID */
+#orbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.orb,
+#cast {
+  min-height: 82px;
+  padding: 8px 0;
+  border: 1px solid #3a3556;
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font: bold 1rem Georgia, serif;
+  cursor: pointer;
+}
+
+.orb {
+  display: block;
+}
+
+.orb-visual {
+  display: block;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 4px;
+}
+
+.orb-visual img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.orb-visual .placeholder {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #171522;
+  color: var(--mute);
+  font-size: 0.65rem;
+}
+
+.orb small {
+  display: block;
+  color: var(--mute);
+  font: 0.75rem Georgia, serif;
+}
+
+#cast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+#cast .invoke-visual {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#cast .invoke-visual img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+#cast .invoke-visual .placeholder {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #171522;
+  color: var(--mute);
+  font-size: 0.5rem;
+}
+
+#qOrb img,
+#wOrb img,
+#eOrb img,
+#invokeImg img {
+  width: 52px;
+  height: 52px;
+  display: block;
+  margin: 0 auto 4px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.orb:active,
+#cast:active {
+  transform: scale(0.95);
+}
+
+#msg {
+  min-height: 1.3em;
+  color: var(--mute);
+  text-align: center;
+}
+
+/* 8. HELP / SCOREBOARD MODAL */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.modal {
+  width: min(560px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 18px;
+  background: #18152a;
+  border: 1px solid #3a3556;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal h2,
+.modal h3 {
+  margin: 0 0 10px;
+}
+
+.modal h3 {
+  margin-top: 18px;
+}
+
+#currentScoreBox {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border-radius: 10px;
+  color: var(--mute);
+}
+
+#currentScoreBox b {
+  color: var(--gold);
+}
+
+.modalClose {
+  width: 100%;
+  margin-top: 14px;
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--gold);
+  color: #111;
+  font: bold 1rem Georgia, serif;
+  cursor: pointer;
+}
+
+#book,
+#familiarBook,
+#scoreBoard {
+  display: grid;
+  gap: 8px;
+}
+
+#book div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--panel);
+  border-radius: 10px;
+}
+
+#book .spell-img {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+#book .orb-mini {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+#book .book-placeholder {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: #171522;
+  color: var(--mute);
+  font-size: 0.55rem;
+  border-radius: 8px;
+}
+
+#book .orb-placeholder {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  background: #171522;
+  color: var(--mute);
+  font-size: 0.45rem;
+  border-radius: 50%;
+}
+
+#book b {
+  margin-left: auto;
+  color: var(--gold);
+  text-align: right;
+}
+
+.familiar {
+  padding: 9px 10px;
+  background: var(--panel);
+  border-radius: 10px;
+}
+
+.familiar strong {
+  color: var(--gold);
+}
+
+.familiar span {
+  color: var(--mute);
+  font-size: 0.83rem;
+  line-height: 1.4;
+}
+
+.scoreRow {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 10px;
+  background: var(--panel);
+  border-radius: 10px;
+}
+
+.scoreRank {
+  color: var(--mute);
+}
+
+.scoreName {
+  overflow: hidden;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scoreValue {
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.emptyScores {
+  padding: 10px;
+  color: var(--mute);
+  text-align: center;
+}
+
+/* 9. PAUSE MODAL */
+#pauseOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.76);
+}
+
+.pauseCard {
+  width: min(360px, 100%);
+  padding: 24px;
+  background: #18152a;
+  border: 1px solid #3a3556;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.pauseCard h2 {
+  margin: 0 0 8px;
+  color: var(--gold);
+}
+
+.pauseCard p {
+  margin: 0 0 16px;
+  color: var(--mute);
+}
+
+.pauseCard button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--gold);
+  color: #111;
+  font: bold 1rem Georgia, serif;
+  cursor: pointer;
+}
+
+/* 10. START / GAME OVER SCREEN */
+#over {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  overflow: auto;
+  padding: 24px;
+  background: rgba(20, 18, 31, 0.97);
+  text-align: center;
+}
+
+#over h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+#over p {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--mute);
+  line-height: 1.5;
+}
+
+#startHint {
+  color: var(--mute);
+  font-size: 0.9rem;
+}
+
+#nameArea {
+  width: min(320px, 100%);
+  display: grid;
+  gap: 8px;
+}
+
+#playerName {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #4a4560;
+  border-radius: 12px;
+  outline: none;
+  background: var(--panel);
+  color: var(--text);
+  font: 1rem Georgia, serif;
+  user-select: text;
+}
+
+#nameHint {
+  color: var(--mute);
+  font-size: 0.8rem;
+}
+
+#finalActions {
+  width: min(420px, 100%);
+  display: flex;
+  gap: 8px;
+}
+
+#finalActions button {
+  flex: 1;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--gold);
+  color: #111;
+  font: bold 1rem Georgia, serif;
+  cursor: pointer;
+}
+
+#finalActions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 11. ERROR / ANIMATION */
+#flash {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: radial-gradient(circle, rgba(255, 0, 0, 0.25), rgba(255, 0, 0, 0.75));
+  opacity: 0;
+  pointer-events: none;
+}
+
+#flash.on {
+  animation: fl 0.7s;
+}
+
+@keyframes fl {
+  0% { 
+    opacity: 0; 
+  }
+  20% { 
+    opacity: 1; 
+  }
+  100% { 
+    opacity: 0; 
+  }
+}
+
+body.err #target {
+  border: 2px solid var(--bad);
+}
+
+.shake {
+  animation: sh 0.3s;
+}
+
+@keyframes sh {
+  25% { 
+    transform: translateX(-8px); 
+  }
+  75% { 
+    transform: translateX(8px); 
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shake { 
+    animation: none; 
+  }
+  .targetSpell { 
+    transition: none; 
+  }
+
+}

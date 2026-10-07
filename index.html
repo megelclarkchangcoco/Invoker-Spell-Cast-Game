@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/png" href="assets/img/dota-logo.png">
+<title>Invoker – Spell Combo Challenge</title>
+</head>
+
+<body>
+  <div id="flash"></div>
+
+  <div id="app">
+    <header>
+      <div id="topActions">
+        <button id="pauseBtn" aria-label="Pause game">ESC</button>
+        <button id="qm" aria-label="Open help and scoreboard">?</button>
+      </div>
+    </header>
+
+    <div id="bar"><div id="fill"></div></div>
+
+    <div id="target">
+      <small>Cast the skills shown below — any order is allowed.</small>
+      <div id="spellHeader">1 SPELL</div>
+      <div id="comboTargets"></div>
+      <div id="progress">0 / 1 cast</div>
+    </div>
+
+    <div id="slots">
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
+    </div>
+
+    <div id="msg"></div>
+
+    <!-- Four compact buttons: Q / W / E / R -->
+    <div id="orbs">
+      <button class="orb" id="q" aria-label="Quas">
+        <span id="qOrb"></span>
+        <small>Q</small>
+      </button>
+
+      <button class="orb" id="w" aria-label="Wex">
+        <span id="wOrb"></span>
+        <small>W</small>
+      </button>
+
+      <button class="orb" id="e" aria-label="Exort">
+        <span id="eOrb"></span>
+        <small>E</small>
+      </button>
+
+      <button class="orb" id="cast" aria-label="Invoke spell">
+        <span id="invokeImg"></span>
+        <small>R</small>
+      </button>
+    </div>
+
+    <!-- Help is a real modal, not a page-sized panel -->
+    <div id="help" class="modal-backdrop hide" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="modal" role="document">
+        <h2 id="helpTitle">Invoker Spell Book</h2>
+        <div id="book"></div>
+
+        <h3>10 Familiar Invoker Combos</h3>
+        <div id="familiarBook"></div>
+
+        <h3>Score Board</h3>
+        <div id="scoreBoard"></div>
+
+        <button id="close" class="modalClose">Close</button>
+      </div>
+    </div>
+
+    <!-- Pause overlay -->
+    <div id="pauseOverlay" class="hide" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+      <div class="pauseCard">
+        <h2 id="pauseTitle">Game Paused</h2>
+        <p>Press ESC or tap Resume to continue.</p>
+        <button id="resumeBtn">Resume</button>
+      </div>
+    </div>
+
+    <!-- Start / Game-over screen (visible on load) -->
+    <div id="over">
+      <h1 id="oTitle">Invoker</h1>
+      <p id="oText">
+        Build each spell from memory using Quas / Wex / Exort, then press Invoke.
+        More spells appear as your score grows.
+      </p>
+
+      <div id="overBoard"></div>
+
+      <input
+        id="playerName"
+        class="hide"
+        type="text"
+        maxlength="20"
+        placeholder="Enter your name"
+        autocomplete="name"
+      >
+
+      <div id="nameHint" class="hide">Your score will be saved to the local score board.</div>
+
+      <div id="finalActions">
+        <button id="saveScore" class="hide">Save Score</button>
+        <button id="start">Start Game</button>
+      </div>
+    </div>
+  </div>
+
+<script src="assets/script.js"> </script>
+</body>
+</html>
