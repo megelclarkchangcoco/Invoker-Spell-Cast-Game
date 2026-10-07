@@ -27,7 +27,7 @@ const SPELLS = [
   { n:"Alacrity",         c:"WWE", img:"assets/img/Alacrity.png" },
 
   { n:"Sun Strike",       c:"EEE", img:"assets/img/Sunstrike.png" },
-  { n:"Forge Spirit",     c:"EEQ", img:"../assets/img/Forge_spirit.png" },
+  { n:"Forge Spirit",     c:"EEQ", img:"../assets/img/ForgeSpirit.png" },
   { n:"Chaos Meteor",     c:"EEW", img:"assets/img/Choas_meteor.png" },
 
   { n:"Deafening Blast",  c:"QWE", img:"assets/img/Blast.png" }
